@@ -40,13 +40,13 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        spaceShip.update(0.15f);
         ScreenUtils.clear(0,0,0,1);
         batch.begin();
         //первый слой
         background.draw(batch);
         //второй слой
         spaceShip.draw(batch);
-        spaceShip.update(0.15f);
         batch.end();
 
     }

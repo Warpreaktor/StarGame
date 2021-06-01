@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Rect {
 
-    public final Vector2 pos = new Vector2(); // позиция по центру
+    public final Vector2 pos = new Vector2(); // текущая позиция на экране, от центра объекта.
     protected float halfWidth; // половина ширины
     protected float halfHeight; // половина высоты
 

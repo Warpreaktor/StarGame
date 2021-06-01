@@ -27,6 +27,7 @@ public class Sprite extends Rect {
                 halfWidth, halfHeight,
                 getWidth(), getHeight(),
         scale, scale, angle);
+
     }
 
     /**
