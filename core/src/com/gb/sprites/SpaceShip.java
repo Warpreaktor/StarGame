@@ -1,7 +1,6 @@
 package com.gb.sprites;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.gb.base.Sprite;
 import com.gb.math.Rect;
@@ -9,15 +8,14 @@ import com.gb.math.Rect;
 public class SpaceShip extends Sprite {
     private final static float DISTANCE_LEN = 0.01f;
     private final static float SHIP_SIZE = 0.10f;
-    private Rect worldbounds;
 
     private Vector2 ssSpeed;    //скорость и направление движения корабля
     private Vector2 distance;   //дистанция до указателя
     private Vector2 touch;      //указатель
 
 
-    public SpaceShip(Texture texture){
-        super(new TextureRegion(texture));
+    public SpaceShip(TextureAtlas atlas){
+        super(atlas.findRegion("spaceShip"));
         touch = new Vector2();
         ssSpeed = new Vector2();
         distance = new Vector2();
@@ -27,7 +25,6 @@ public class SpaceShip extends Sprite {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         setHeightProportion(SHIP_SIZE);
-        this.worldbounds = worldBounds;
     }
 
     @Override
@@ -67,7 +64,6 @@ public class SpaceShip extends Sprite {
         }else{
             pos.add(ssSpeed);
         }
-        System.out.println(getTop());
         if (getTop() >= 0){
 
             setTop(0);
