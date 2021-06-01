@@ -11,21 +11,41 @@ public class Star extends Sprite {
 
     private final Vector2 starSpeed;
     private final float STAR_SIZE = 0.01f;
+    private Rect worldbounds;
 
     public Star(TextureAtlas atlas) {
         super(atlas.findRegion("star")); //Идем в атлас и ищем по имени нужную текстуру
         starSpeed = new Vector2();
+        float speedX = Rnd.nextFloat(-0.0005f, 0.0005f); //скорость перемещения звезды по оси x
+        float speedY = Rnd.nextFloat(-0.01f, -0.05f);//скорость перемещения звезды по оси y
+        starSpeed.set(speedX, speedY);
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
+        pos.mulAdd(starSpeed, delta);
+        //Условие. Если левый край объекта заходит за правую границу экрана, значит
+        // необходимо переместить объект к левой границе экрана.
+        if (getRight() < worldbounds.getLeft()){
+            setLeft(worldbounds.getRight());
+        }
+        if (getLeft() > worldbounds.getRight()){
+            setRight(worldbounds.getLeft());
+        }
+        if (getTop() < worldbounds.getBottom()){
+            setBottom(worldbounds.getTop());
+        }
+        if (getBottom() > worldbounds.getTop()){
+            setTop(worldbounds.getBottom());
+        }
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         setHeightProportion(STAR_SIZE);
+        this.worldbounds = worldBounds;
         //Генерируем случайную позицию появления объекта звезды
         float x = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
         float y = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());

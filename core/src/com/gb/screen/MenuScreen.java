@@ -22,7 +22,8 @@ public class MenuScreen extends BaseScreen {
 
     private Vector2 touch; //координаты места на экране куда ткнул пользователь.
 
-    private Star star;
+    private Star[] stars;
+    private static final int STARS_COUNT = 256;
 
     @Override
     public void show() {
@@ -36,7 +37,10 @@ public class MenuScreen extends BaseScreen {
         touch = new Vector2();
 
         menuAtlas = new TextureAtlas("textures/menuAtlas.tpack");
-        star = new Star(menuAtlas);
+        stars = new Star[STARS_COUNT];
+        for (int i = 0; i < stars.length; i++) {
+            stars[i] = new Star(menuAtlas);
+        }
     }
 
     @Override
@@ -44,7 +48,10 @@ public class MenuScreen extends BaseScreen {
         super.resize(worldBounds);
         background.resize(worldBounds);
         spaceShip.resize(worldBounds);
-        star.resize(worldBounds);
+        for(Star star: stars){
+            star.resize(worldBounds);
+        }
+
     }
 
     @Override
@@ -59,7 +66,6 @@ public class MenuScreen extends BaseScreen {
      */
     @Override
     public void dispose() {
-
         super.dispose();
         backgroungTexture.dispose();
         spaceShipTexture.dispose();
@@ -74,8 +80,9 @@ public class MenuScreen extends BaseScreen {
 
     public void update(float delta){
         spaceShip.update(0.15f);
-        star.update(delta);
-
+        for(Star star: stars){
+            star.update(delta);
+        }
     }
 
     private void draw(){
@@ -84,8 +91,12 @@ public class MenuScreen extends BaseScreen {
 
         //первый слой
         background.draw(batch);
+
         //второй слой
-        star.draw(batch);
+        for(Star star: stars){
+            star.draw(batch);
+        }
+
         //Третий слой
         spaceShip.draw(batch);
 
