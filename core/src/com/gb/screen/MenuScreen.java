@@ -1,5 +1,6 @@
 package com.gb.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -7,12 +8,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.gb.base.BaseScreen;
 import com.gb.math.Rect;
 import com.gb.sprites.Background;
-import com.gb.sprites.ButtonExit;
+import com.gb.sprites.ExitButton;
+import com.gb.sprites.PlayButton;
 import com.gb.sprites.SpaceShip;
 import com.gb.sprites.Star;
 
 
 public class MenuScreen extends BaseScreen {
+    private final Game game;
+
     private Texture backgroungTexture;
     private Background background;
 
@@ -26,7 +30,13 @@ public class MenuScreen extends BaseScreen {
     private Star[] stars;
     private static final int STARS_COUNT = 256;
 
-    private ButtonExit buttonExit;
+    //Кнопки
+    private ExitButton exitButton;
+    private PlayButton playButton;
+
+    public MenuScreen(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
@@ -45,7 +55,8 @@ public class MenuScreen extends BaseScreen {
             stars[i] = new Star(menuAtlas);
         }
 
-        buttonExit = new ButtonExit(menuAtlas);
+        exitButton = new ExitButton(menuAtlas);
+        playButton = new PlayButton(menuAtlas, game);
     }
 
     @Override
@@ -56,7 +67,8 @@ public class MenuScreen extends BaseScreen {
         for(Star star: stars){
             star.resize(worldBounds);
         }
-        buttonExit.resize(worldBounds);
+        exitButton.resize(worldBounds);
+        playButton.resize(worldBounds);
     }
 
     /**
@@ -73,13 +85,15 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         spaceShip.touchDown(touch, pointer, button);
-        buttonExit.touchDown(touch, pointer, button);
+        exitButton.touchDown(touch, pointer, button);
+        playButton.touchDown(touch, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        buttonExit.touchUp(touch, pointer, button);
+        exitButton.touchUp(touch, pointer, button);
+        playButton.touchUp(touch, pointer, button);
         return false;
     }
 
@@ -88,7 +102,8 @@ public class MenuScreen extends BaseScreen {
         for(Star star: stars){
             star.update(delta);
         }
-        buttonExit.update(delta);
+        exitButton.update(delta);
+        playButton.update(delta);
     }
 
     private void draw(){
@@ -105,7 +120,8 @@ public class MenuScreen extends BaseScreen {
 
         //Третий слой
         spaceShip.draw(batch);
-        buttonExit.draw(batch);
+        exitButton.draw(batch);
+        playButton.draw(batch);
         batch.end();
     }
 
