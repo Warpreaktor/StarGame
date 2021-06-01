@@ -8,18 +8,26 @@ import com.gb.math.Rect;
 import com.gb.math.Rnd;
 
 public class Star extends Sprite {
-
     private final Vector2 starSpeed;
     private Rect worldbounds;
 
     public Star(TextureAtlas atlas) {
         super(atlas.findRegion("star")); //Идем в атлас и ищем по имени нужную текстуру
         starSpeed = new Vector2();
-        float speedX = Rnd.nextFloat(-0.0005f, 0.0005f); //скорость перемещения звезды по оси x
-        float speedY = Rnd.nextFloat(-0.01f, -0.05f);//скорость перемещения звезды по оси y
-        starSpeed.set(speedX, speedY);
+        setStarsMovement(0,0);
     }
 
+    @Override
+    public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
+        float starSize = Rnd.nextFloat(0.003f, 0.006f);
+        setHeightProportion(starSize);
+        this.worldbounds = worldBounds;
+        //Генерируем случайную позицию появления объекта звезды
+        float x = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
+        float y = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
+        pos.set(x, y);
+    }
     @Override
     public void update(float delta) {
         super.update(delta);
@@ -39,24 +47,12 @@ public class Star extends Sprite {
             setTop(worldbounds.getBottom());
         }
 
-        float height = getHeight();
-        height += 0.0001f;
-        if(height >= 0.012){
-            height = 0.009f;
-            setHeightProportion(height);
-        }else{
-            setHeightProportion(height);
-        }
+
     }
 
-    @Override
-    public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
-        setHeightProportion(Rnd.nextFloat(0.001f, 0.011f));
-        this.worldbounds = worldBounds;
-        //Генерируем случайную позицию появления объекта звезды
-        float x = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
-        float y = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
-        pos.set(x, y);
+
+
+    public void setStarsMovement(float x, float y){
+        starSpeed.set(x, y);
     }
 }

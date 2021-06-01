@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gb.base.BaseScreen;
 import com.gb.math.Rect;
+import com.gb.math.Rnd;
 import com.gb.sprites.Background;
 import com.gb.sprites.ExitButton;
 import com.gb.sprites.PlayButton;
@@ -19,9 +20,6 @@ public class MenuScreen extends BaseScreen {
 
     private Texture backgroungTexture;
     private Background background;
-
-    private Texture spaceShipTexture;
-    private SpaceShip spaceShip;
 
     private TextureAtlas menuAtlas;
 
@@ -44,15 +42,15 @@ public class MenuScreen extends BaseScreen {
         backgroungTexture = new Texture("cosmos.png");
         background = new Background(backgroungTexture);
 
-        spaceShipTexture = new Texture("space_ship.png");
-        spaceShip = new SpaceShip(spaceShipTexture);
-
         touch = new Vector2();
 
         menuAtlas = new TextureAtlas("textures/menuAtlas.tpack");
         stars = new Star[STARS_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(menuAtlas);
+            float speedX = Rnd.nextFloat(-0.0005f, 0.0005f); //скорость перемещения звезды по оси x
+            float speedY = Rnd.nextFloat(-0.002f, -0.01f);//скорость перемещения звезды по оси y
+            stars[i].setStarsMovement(speedX,speedY);
         }
 
         exitButton = new ExitButton(menuAtlas);
@@ -63,7 +61,6 @@ public class MenuScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        spaceShip.resize(worldBounds);
         for(Star star: stars){
             star.resize(worldBounds);
         }
@@ -78,13 +75,11 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         backgroungTexture.dispose();
-        spaceShipTexture.dispose();
         menuAtlas.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        spaceShip.touchDown(touch, pointer, button);
         exitButton.touchDown(touch, pointer, button);
         playButton.touchDown(touch, pointer, button);
         return false;
@@ -98,7 +93,6 @@ public class MenuScreen extends BaseScreen {
     }
 
     public void update(float delta){
-        spaceShip.update(0.15f);
         for(Star star: stars){
             star.update(delta);
         }
@@ -107,7 +101,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void draw(){
-        ScreenUtils.clear(0,0,0,1);
+        ScreenUtils.clear(0,0,0,0);
         batch.begin();
 
         //первый слой
@@ -119,7 +113,6 @@ public class MenuScreen extends BaseScreen {
         }
 
         //Третий слой
-        spaceShip.draw(batch);
         exitButton.draw(batch);
         playButton.draw(batch);
         batch.end();
