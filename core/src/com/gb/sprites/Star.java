@@ -10,7 +10,6 @@ import com.gb.math.Rnd;
 public class Star extends Sprite {
 
     private final Vector2 starSpeed;
-    private final float STAR_SIZE = 0.01f;
     private Rect worldbounds;
 
     public Star(TextureAtlas atlas) {
@@ -39,12 +38,21 @@ public class Star extends Sprite {
         if (getBottom() > worldbounds.getTop()){
             setTop(worldbounds.getBottom());
         }
+
+        float height = getHeight();
+        height += 0.0001f;
+        if(height >= 0.012){
+            height = 0.009f;
+            setHeightProportion(height);
+        }else{
+            setHeightProportion(height);
+        }
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        setHeightProportion(STAR_SIZE);
+        setHeightProportion(Rnd.nextFloat(0.001f, 0.011f));
         this.worldbounds = worldBounds;
         //Генерируем случайную позицию появления объекта звезды
         float x = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
