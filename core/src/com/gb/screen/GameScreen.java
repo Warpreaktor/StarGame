@@ -103,8 +103,16 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return super.touchUp(touch, pointer, button);
+        spaceShip.touchUp(touch, pointer, button);
+        return false;
     }
+
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        spaceShip.touchDragged(touch, pointer);
+        return false;
+    }
+
 
     @Override
     public void render(float delta) {

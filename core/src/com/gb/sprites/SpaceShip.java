@@ -40,6 +40,23 @@ public class SpaceShip extends Sprite {
     }
 
     @Override
+    public boolean touchUp(Vector2 touch, int pointer, int button) {
+        return super.touchUp(touch, pointer, button);
+    }
+
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        this.touch.set(touch);
+        distance.set(touch);
+        //Вычисление направления векотра происходит путём вычитания вектора текущей позиции объекта
+        // из вектора цели.
+        // Далее получаем длинную этого вектора и задаем скорость указанием пропорции этой длинны.
+        ssSpeed.set(touch.cpy().sub(pos)).setLength(DISTANCE_LEN);
+        return false;
+    }
+
+
+    @Override
     public void update(float delta) {
         super.update(delta);
         distance.set(touch);
