@@ -26,7 +26,6 @@ public class SpaceShip extends Sprite {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         setHeightProportion(SHIP_SIZE);
-//        this.pos.set(worldBounds.pos);
     }
 
     @Override
