@@ -110,9 +110,9 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchDragged(Vector2 touch, int pointer) {
         spaceShip.touchDragged(touch, pointer);
+
         return false;
     }
-
 
     @Override
     public void render(float delta) {
