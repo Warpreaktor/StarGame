@@ -22,6 +22,8 @@ public class Sprite extends Rect {
         animation[0] = region;
     }
 
+
+
     public void draw(SpriteBatch batch){
         batch.draw(animation[frame], getLeft(), getBottom(),
                 halfWidth, halfHeight,
