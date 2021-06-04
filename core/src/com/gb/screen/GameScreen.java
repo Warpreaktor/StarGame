@@ -15,11 +15,11 @@ public class GameScreen extends BaseScreen {
     private Texture backgroungTexture;
     private Background background;
 
-    private Texture spaceShipTexture;
     private SpaceShip spaceShip;
 
     private TextureAtlas mainAtlas;
     private TextureAtlas menuAtlas;
+    private TextureAtlas shipsAtlas;
 
     private Vector2 touch; //координаты места на экране куда ткнул пользователь.
 
@@ -33,8 +33,8 @@ public class GameScreen extends BaseScreen {
         backgroungTexture = new Texture("cosmos.png");
         background = new Background(backgroungTexture);
 
-        spaceShipTexture = new Texture("space_ship.png");
-        spaceShip = new SpaceShip(spaceShipTexture);
+        shipsAtlas = new TextureAtlas("textures/shipsAtlas.pack");
+        spaceShip = new SpaceShip(shipsAtlas);
 
         touch = new Vector2();
 
@@ -66,9 +66,9 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         backgroungTexture.dispose();
-        spaceShipTexture.dispose();
         mainAtlas.dispose();
         menuAtlas.dispose();
+        shipsAtlas.dispose();
     }
 
     public void update(float delta){
@@ -103,7 +103,14 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return super.touchUp(touch, pointer, button);
+        spaceShip.touchUp(touch, pointer, button);
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        spaceShip.touchDragged(touch, pointer);
+        return false;
     }
 
     @Override

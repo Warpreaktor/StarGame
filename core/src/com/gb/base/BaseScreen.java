@@ -45,7 +45,6 @@ public class BaseScreen implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         //Срабатывает 60 раз в секунду
-
         ScreenUtils.clear(0.33f, 0.68f, 0.45f, 1);
         batch.begin();
         batch.end();
@@ -160,5 +159,9 @@ public class BaseScreen implements Screen, InputProcessor {
     public boolean scrolled(float amountX, float amountY) {
         //Скроллинг мыши
         return false;
+    }
+
+    public Rect getWorldBounds() {
+        return worldBounds;
     }
 }
