@@ -8,6 +8,7 @@ import com.gb.math.Rect;
 public class SpaceShip extends Sprite {
     private final static float DISTANCE_LEN = 0.01f;
     private final static float SHIP_SIZE = 0.10f;
+    private Rect worldBounds;
 
     private Vector2 ssSpeed;    //скорость и направление движения корабля
     private Vector2 distance;   //дистанция до указателя
@@ -15,7 +16,7 @@ public class SpaceShip extends Sprite {
 
 
     public SpaceShip(TextureAtlas atlas){
-        super(atlas.findRegion("spaceShip"));
+        super(atlas.findRegion("space_ship"), 1, 1, 2);
         touch = new Vector2();
         ssSpeed = new Vector2();
         distance = new Vector2();
@@ -24,7 +25,9 @@ public class SpaceShip extends Sprite {
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
+        this.worldBounds = worldBounds;
         setHeightProportion(SHIP_SIZE);
+        setBottom(worldBounds.getBottom() + 0.05f);
     }
 
     @Override
@@ -61,12 +64,21 @@ public class SpaceShip extends Sprite {
         distance.set(touch);
         if (distance.sub(pos).len() <= DISTANCE_LEN){
             pos.set(touch);
+            System.out.println(getLeft());
         }else{
             pos.add(ssSpeed);
         }
         if (getTop() >= 0){
-
             setTop(0);
+        }
+        if (getLeft() <= worldBounds.getLeft()){
+            setLeft(worldBounds.getLeft());
+        }
+        if (getRight() >= worldBounds.getRight()){
+            setRight(worldBounds.getRight());
+        }
+        if (getBottom() <= worldBounds.getBottom()){
+            setBottom(worldBounds.getBottom());
         }
     }
 

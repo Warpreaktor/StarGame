@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.gb.math.Rect;
+import com.gb.utils.Regions;
 
 public class Sprite extends Rect {
     private float angle;
@@ -22,7 +23,9 @@ public class Sprite extends Rect {
         animation[0] = region;
     }
 
-
+    public Sprite(TextureRegion region, int rows, int cols, int frames){
+        animation = Regions.split(region, rows, cols, frames);
+    }
 
     public void draw(SpriteBatch batch){
         batch.draw(animation[frame], getLeft(), getBottom(),

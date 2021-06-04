@@ -56,7 +56,7 @@ public class GameScreen extends BaseScreen {
         super.resize(worldBounds);
         background.resize(worldBounds);
         spaceShip.resize(worldBounds);
-        spaceShip.pos.set(0, worldBounds.getBottom() + spaceShip.getHalfHeight());
+        //spaceShip.pos.set(0, worldBounds.getBottom() + spaceShip.getHalfHeight());
         for(Star star: stars){
             star.resize(worldBounds);
         }
