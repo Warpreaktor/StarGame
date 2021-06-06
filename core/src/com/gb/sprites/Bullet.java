@@ -13,12 +13,17 @@ public class Bullet extends Sprite {
     private int damage;
     private Sprite owner;
 
-
+    private Sound shoot;
 
 
     public Bullet(){
         animation = new TextureRegion[1];
         speed = new Vector2();
+        shoot = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound1.mp3"));
+    }
+
+    public void sound(){
+        shoot.play();
     }
 
     @Override

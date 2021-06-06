@@ -184,15 +184,16 @@ public class SpaceShip extends Sprite {
                 moveRight();
                 break;
             case Input.Keys.R:
-                shoot();
+                shoot().sound();
                 break;
         }
         return false;
     }
 
-    private void shoot(){
+    private Bullet shoot(){
         Bullet bullet = bulletPool.obtain();
         bulletPos.set(pos.x, pos.y + getHalfHeight());
         bullet.set(this, bulletRegion, this.bulletPos, bulletSpeed, worldBounds, 1, 0.01f);
+        return bullet;
     }
 }
