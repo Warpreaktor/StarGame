@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.gb.base.BaseScreen;
 import com.gb.math.Rect;
 import com.gb.math.Rnd;
+import com.gb.pool.BulletPool;
 import com.gb.sprites.Background;
 import com.gb.sprites.SpaceShip;
 import com.gb.sprites.Star;
@@ -26,6 +27,8 @@ public class GameScreen extends BaseScreen {
     private Star[] stars;
     private static final int STARS_COUNT = 256;
 
+    private BulletPool bulletPool;
+
     @Override
     public void show() {
         super.show();
@@ -33,8 +36,10 @@ public class GameScreen extends BaseScreen {
         backgroungTexture = new Texture("cosmos.png");
         background = new Background(backgroungTexture);
 
-        shipsAtlas = new TextureAtlas("textures/shipsAtlas.pack");
-        spaceShip = new SpaceShip(shipsAtlas);
+        bulletPool = new BulletPool();
+
+        shipsAtlas = new TextureAtlas("textures/mainAtlas.tpack");
+        spaceShip = new SpaceShip(shipsAtlas, bulletPool);
 
         touch = new Vector2();
 
@@ -47,16 +52,13 @@ public class GameScreen extends BaseScreen {
             float speedY = Rnd.nextFloat(-0.06f, -0.5f);//скорость перемещения звезды по оси y
             stars[i].setStarsMovement(speedX, speedY);
         }
-
     }
-
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
         spaceShip.resize(worldBounds);
-        //spaceShip.pos.set(0, worldBounds.getBottom() + spaceShip.getHalfHeight());
         for(Star star: stars){
             star.resize(worldBounds);
         }
@@ -69,6 +71,7 @@ public class GameScreen extends BaseScreen {
         mainAtlas.dispose();
         menuAtlas.dispose();
         shipsAtlas.dispose();
+        bulletPool.dispose();
     }
 
     public void update(float delta){
@@ -76,8 +79,13 @@ public class GameScreen extends BaseScreen {
         for(Star star: stars){
             star.update(delta);
         }
-
+        bulletPool.updateActiveSprites(delta);
     }
+
+    public void freeAllDestroyed(){
+        bulletPool.freeAllDestroyed();
+    }
+
     public void draw(){
         ScreenUtils.clear(0,0,0,1);
         batch.begin();
@@ -92,6 +100,7 @@ public class GameScreen extends BaseScreen {
 
         //Третий слой
         spaceShip.draw(batch);
+        bulletPool.drawActiveSprite(batch);
         batch.end();
     }
 
@@ -114,8 +123,21 @@ public class GameScreen extends BaseScreen {
     }
 
     @Override
+    public boolean keyDown(int keycode) {
+        spaceShip.keyDown(keycode);
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        spaceShip.keyUp(keycode);
+        return false;
+    }
+
+    @Override
     public void render(float delta) {
         update(delta);
+        freeAllDestroyed();
         draw();
     }
 }
