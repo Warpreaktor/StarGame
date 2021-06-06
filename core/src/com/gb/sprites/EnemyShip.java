@@ -99,7 +99,7 @@ public class EnemyShip extends Sprite {
 
     private Bullet shoot(){
         Bullet bullet = bulletPool.obtain();
-        bulletPos.set(pos.x, pos.y + getHalfHeight());
+        bulletPos.set(pos.x, pos.y);
         bullet.set(this, bulletRegion, this.bulletPos, bulletSpeed, worldBounds, 1, 0.01f);
         return bullet;
     }
