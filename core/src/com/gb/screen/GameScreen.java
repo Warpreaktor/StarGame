@@ -1,9 +1,11 @@
 package com.gb.screen;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.gb.Music.Soundtrack;
 import com.gb.base.BaseScreen;
 import com.gb.math.Rect;
 import com.gb.math.Rnd;
@@ -29,6 +31,8 @@ public class GameScreen extends BaseScreen {
 
     private BulletPool bulletPool;
 
+    private Soundtrack soundtrack;
+
     @Override
     public void show() {
         super.show();
@@ -52,6 +56,8 @@ public class GameScreen extends BaseScreen {
             float speedY = Rnd.nextFloat(-0.06f, -0.5f);//скорость перемещения звезды по оси y
             stars[i].setStarsMovement(speedX, speedY);
         }
+        soundtrack = new Soundtrack();
+        soundtrack.play();
     }
 
     @Override
