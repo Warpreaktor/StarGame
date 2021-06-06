@@ -7,7 +7,7 @@ public class Soundtrack implements Music{
     private Music track;
 
     public Soundtrack() {
-        track = Gdx.audio.newMusic(Gdx.files.internal("sounds/galactic_hare.mp3"));
+        track = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundtrack.mp3"));
     }
 
     @Override

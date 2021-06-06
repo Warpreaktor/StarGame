@@ -61,6 +61,7 @@ public class GameScreen extends BaseScreen {
         }
         soundtrack = new Soundtrack();
         soundtrack.play();
+        soundtrack.setVolume(0.5f);
     }
 
     @Override

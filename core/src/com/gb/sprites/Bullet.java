@@ -20,7 +20,7 @@ public class Bullet extends Sprite {
     public Bullet(){
         animation = new TextureRegion[1];
         speed = new Vector2();
-        shoot = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound1.mp3"));
+
     }
 
     public void sound(){
@@ -49,6 +49,12 @@ public class Bullet extends Sprite {
         this.worldbounds = worldbounds;
         this.damage = damage;
         setHeightProportion(height);
+
+        if (owner.getClass().getSimpleName().equals("SpaceShip")) {
+            shoot = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound1.mp3"));
+        }else{
+            shoot = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound2.mp3"));
+        }
     }
 
     public Vector2 getSpeed() {

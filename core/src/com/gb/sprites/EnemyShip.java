@@ -58,7 +58,7 @@ public class EnemyShip extends Sprite {
         this.delta+=delta;
 
         if (this.delta > 5f){
-            shoot();
+            shoot().sound();
             this.delta = 0;
         }
 
