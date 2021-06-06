@@ -14,6 +14,7 @@ public class Bullet extends Sprite {
     private Sprite owner;
 
     private Sound shoot;
+    private float volume = 0.5f;
 
 
     public Bullet(){
@@ -23,7 +24,7 @@ public class Bullet extends Sprite {
     }
 
     public void sound(){
-        shoot.play();
+        shoot.play(volume);
     }
 
     @Override

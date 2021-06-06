@@ -11,6 +11,7 @@ import com.gb.math.Rect;
 import com.gb.math.Rnd;
 import com.gb.pool.BulletPool;
 import com.gb.sprites.Background;
+import com.gb.sprites.EnemyShip;
 import com.gb.sprites.SpaceShip;
 import com.gb.sprites.Star;
 
@@ -19,12 +20,13 @@ public class GameScreen extends BaseScreen {
     private Background background;
 
     private SpaceShip spaceShip;
+    private EnemyShip enemyShip;
 
     private TextureAtlas mainAtlas;
     private TextureAtlas menuAtlas;
     private TextureAtlas shipsAtlas;
 
-    private Vector2 touch; //координаты места на экране куда ткнул пользователь.
+    private Vector2 touch; //координаты места на экране куда тыкнул пользователь.
 
     private Star[] stars;
     private static final int STARS_COUNT = 256;
@@ -44,6 +46,7 @@ public class GameScreen extends BaseScreen {
 
         shipsAtlas = new TextureAtlas("textures/mainAtlas.tpack");
         spaceShip = new SpaceShip(shipsAtlas, bulletPool);
+        enemyShip = new EnemyShip(shipsAtlas, bulletPool);
 
         touch = new Vector2();
 
@@ -65,6 +68,7 @@ public class GameScreen extends BaseScreen {
         super.resize(worldBounds);
         background.resize(worldBounds);
         spaceShip.resize(worldBounds);
+        enemyShip.resize(worldBounds);
         for(Star star: stars){
             star.resize(worldBounds);
         }
@@ -78,10 +82,12 @@ public class GameScreen extends BaseScreen {
         menuAtlas.dispose();
         shipsAtlas.dispose();
         bulletPool.dispose();
+        soundtrack.dispose();
     }
 
     public void update(float delta){
         spaceShip.update(0.15f);
+        enemyShip.update(0.15f);
         for(Star star: stars){
             star.update(delta);
         }
@@ -106,6 +112,7 @@ public class GameScreen extends BaseScreen {
 
         //Третий слой
         spaceShip.draw(batch);
+        enemyShip.draw(batch);
         bulletPool.drawActiveSprite(batch);
         batch.end();
     }
