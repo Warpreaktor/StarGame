@@ -26,13 +26,15 @@ public class EnemyShip extends Sprite {
     private final Vector2 speed0 = new Vector2(0.005f, 0); //Начальная скорость и направление движения корабля
     private Vector2 speed = new Vector2();    //скорость и направление движения корабля
 
+    private float delta;
+
     public EnemyShip(TextureAtlas atlas, BulletPool bulletPool){
         super(atlas.findRegion("enemy1"), 1, 2, 2);
 
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletEnemy");
         this.bulletPos = new Vector2();
-        bulletSpeed = new Vector2(0, 0.5f);
+        bulletSpeed = new Vector2(0, -0.3f);
 
         target = new Vector2();
         distance = new Vector2();
@@ -53,9 +55,16 @@ public class EnemyShip extends Sprite {
     @Override
     public void update(float delta) {
         super.update(delta);
+        this.delta+=delta;
+
+        if (this.delta > 5f){
+            shoot();
+            this.delta = 0;
+        }
+
         pos.mulAdd(speed, delta);
         distance.set(target);
-        System.out.println(target);
+
         if (distance.sub(pos).len() <= DISTANCE_LEN){
             pos.set(target);
         }else{
@@ -71,8 +80,7 @@ public class EnemyShip extends Sprite {
             setRight(worldBounds.getRight());
         }
         //Изменить логику
-        if (getBottom() <= worldBounds.getBottom() - 0.5f){
-            setTop(worldBounds.getTop() + 0.1f);
+        if (getTop() <= worldBounds.getBottom()){
             randomAtack();
         }
     }
@@ -102,8 +110,10 @@ public class EnemyShip extends Sprite {
      */
     private void randomAtack(){
         this.pos.x = Rnd.nextFloat(0, 1);
+        this.pos.y = worldBounds.getTop();
         this.target.set(Rnd.nextFloat(0 ,1), worldBounds.getBottom() - 0.6f);
         distance.set(0, worldBounds.getBottom());
         speed.set(target.cpy().sub(pos)).setLength(DISTANCE_LEN);
+        speed.y*=0.25f;
     }
 }
