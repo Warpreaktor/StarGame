@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.gb.base.Sprite;
 import com.gb.math.Rect;
+import com.gb.math.Rnd;
 import com.gb.pool.BulletPool;
 
 public class EnemyShip extends Sprite {
@@ -42,7 +43,11 @@ public class EnemyShip extends Sprite {
         super.resize(worldBounds);
         this.worldBounds = worldBounds;
         setHeightProportion(SHIP_SIZE);
-        setBottom(worldBounds.getBottom() + 0.05f);
+        setTop(worldBounds.getTop());
+
+        //Это здесь только для ДЗ
+        randomAtack();
+
     }
 
     @Override
@@ -50,13 +55,14 @@ public class EnemyShip extends Sprite {
         super.update(delta);
         pos.mulAdd(speed, delta);
         distance.set(target);
+        System.out.println(target);
         if (distance.sub(pos).len() <= DISTANCE_LEN){
             pos.set(target);
         }else{
             pos.add(speed);
         }
-        if (getTop() >= 0){
-            setTop(0);
+        if (getTop() >= worldBounds.getTop()){
+            setTop(worldBounds.getTop());
         }
         if (getLeft() <= worldBounds.getLeft()){
             setLeft(worldBounds.getLeft());
@@ -64,8 +70,10 @@ public class EnemyShip extends Sprite {
         if (getRight() >= worldBounds.getRight()){
             setRight(worldBounds.getRight());
         }
-        if (getBottom() <= worldBounds.getBottom()){
-            setBottom(worldBounds.getBottom());
+        //Изменить логику
+        if (getBottom() <= worldBounds.getBottom() - 0.5f){
+            setTop(worldBounds.getTop() + 0.1f);
+            randomAtack();
         }
     }
 
@@ -86,5 +94,16 @@ public class EnemyShip extends Sprite {
         bulletPos.set(pos.x, pos.y + getHalfHeight());
         bullet.set(this, bulletRegion, this.bulletPos, bulletSpeed, worldBounds, 1, 0.01f);
         return bullet;
+    }
+
+    /**
+     * В данном методе захардкодил числа. Но думаю, что он претерпет очень
+     *      большие изменения либо вообще будет удален так что не страшно.
+     */
+    private void randomAtack(){
+        this.pos.x = Rnd.nextFloat(0, 1);
+        this.target.set(Rnd.nextFloat(0 ,1), worldBounds.getBottom() - 0.6f);
+        distance.set(0, worldBounds.getBottom());
+        speed.set(target.cpy().sub(pos)).setLength(DISTANCE_LEN);
     }
 }
