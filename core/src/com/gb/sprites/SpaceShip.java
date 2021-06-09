@@ -11,27 +11,28 @@ import com.gb.pool.BulletPool;
 public class SpaceShip extends Sprite {
     private static final float DISTANCE_LEN = 0.01f;
     private static final float SHIP_SIZE = 0.08f;
-    private static final int INVALID_POINTER = -1;
 
+    //Мониторинг касания и нажатий
+    private  boolean pressedLeft;
+    private  boolean pressedRight;
+    private static final int INVALID_POINTER = -1;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
+    //Пули
     private Rect worldBounds;
     private BulletPool bulletPool;
     private TextureRegion bulletRegion;
     private Vector2 bulletSpeed;
     private Vector2 bulletPos;
 
+    //Движение
     private Vector2 distance;   //дистанция до указателя
     private Vector2 touch;      //указатель
-
     private final Vector2 speed0 = new Vector2(0.005f, 0); //Начальная скорость и направление движения корабля
     private Vector2 speed = new Vector2();    //скорость и направление движения корабля
 
-    private  boolean pressedLeft;
-    private  boolean pressedRight;
 
-    //Озвучка корабля
 
     public SpaceShip(TextureAtlas atlas, BulletPool bulletPool){
         super(atlas.findRegion("main_ship"), 1, 2, 2);
@@ -184,15 +185,16 @@ public class SpaceShip extends Sprite {
                 moveRight();
                 break;
             case Input.Keys.R:
-                shoot();
+                shoot().sound();
                 break;
         }
         return false;
     }
 
-    private void shoot(){
+    private Bullet shoot(){
         Bullet bullet = bulletPool.obtain();
         bulletPos.set(pos.x, pos.y + getHalfHeight());
         bullet.set(this, bulletRegion, this.bulletPos, bulletSpeed, worldBounds, 1, 0.01f);
+        return bullet;
     }
 }

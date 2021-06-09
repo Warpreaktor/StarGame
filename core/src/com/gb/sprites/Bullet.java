@@ -13,12 +13,18 @@ public class Bullet extends Sprite {
     private int damage;
     private Sprite owner;
 
-
+    private Sound shoot;
+    private float volume = 0.5f;
 
 
     public Bullet(){
         animation = new TextureRegion[1];
         speed = new Vector2();
+
+    }
+
+    public void sound(){
+        shoot.play(volume);
     }
 
     @Override
@@ -43,6 +49,12 @@ public class Bullet extends Sprite {
         this.worldbounds = worldbounds;
         this.damage = damage;
         setHeightProportion(height);
+
+        if (owner.getClass().getSimpleName().equals("SpaceShip")) {
+            shoot = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound1.mp3"));
+        }else{
+            shoot = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound2.mp3"));
+        }
     }
 
     public Vector2 getSpeed() {
