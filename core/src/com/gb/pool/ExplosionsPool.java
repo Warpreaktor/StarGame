@@ -1,6 +1,5 @@
 package com.gb.pool;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.gb.base.SpritePool;
 import com.gb.sprites.Explosion;

@@ -52,8 +52,8 @@ public class GameScreen extends BaseScreen {
     private Sound explosionSnd1;
     private Sound explosionSnd2;
 
-    private float soundsVolume;
-    private float musicVolume;
+    private float soundsVolume = 0.5f;
+    private float musicVolume = 0.3f;
 
     private Explosion explosion;
 
