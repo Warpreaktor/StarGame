@@ -1,14 +1,17 @@
 package com.gb.sprites;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.gb.base.Ship;
 import com.gb.base.Sprite;
 import com.gb.math.Rect;
 import com.gb.pool.BulletPool;
 
-public class SpaceShip extends Sprite {
+public class SpaceShip extends Ship {
     private static final float DISTANCE_LEN = 0.01f;
     private static final float SHIP_SIZE = 0.08f;
 
@@ -19,12 +22,7 @@ public class SpaceShip extends Sprite {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    //Пули
-    private Rect worldBounds;
-    private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-    private Vector2 bulletSpeed;
-    private Vector2 bulletPos;
+
 
     //Движение
     private Vector2 distance;   //дистанция до указателя
@@ -34,16 +32,23 @@ public class SpaceShip extends Sprite {
 
 
 
-    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool){
+    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSnd){
         super(atlas.findRegion("main_ship"), 1, 2, 2);
 
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletPos = new Vector2();
         bulletSpeed = new Vector2(0, 0.5f);
+        this.bulletSnd = bulletSnd;
+        bulletDamage = 1;
+        bulletHeight = 0.01f;
 
         touch = new Vector2();
         distance = new Vector2();
+
+        this.hp = 100;
+
+
     }
 
     @Override
@@ -116,6 +121,7 @@ public class SpaceShip extends Sprite {
     @Override
     public void update(float delta) {
         super.update(delta);
+        bulletPos.set(pos.x, pos.y + getHalfHeight());
         pos.mulAdd(speed, delta);
         distance.set(touch);
         if (distance.sub(pos).len() <= DISTANCE_LEN){
@@ -184,17 +190,10 @@ public class SpaceShip extends Sprite {
                 pressedRight = true;
                 moveRight();
                 break;
-            case Input.Keys.R:
-                shoot().sound();
+            case Input.Keys.SPACE:
+                shoot();
                 break;
         }
         return false;
-    }
-
-    private Bullet shoot(){
-        Bullet bullet = bulletPool.obtain();
-        bulletPos.set(pos.x, pos.y + getHalfHeight());
-        bullet.set(this, bulletRegion, this.bulletPos, bulletSpeed, worldBounds, 1, 0.01f);
-        return bullet;
     }
 }

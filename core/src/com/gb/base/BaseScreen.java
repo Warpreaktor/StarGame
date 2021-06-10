@@ -19,7 +19,7 @@ public class BaseScreen implements Screen, InputProcessor {
     private Vector2 touch; //координаты места на экране куда ткнул пользователь.
 
     private Rect screenBounds;
-    private Rect worldBounds;
+    protected Rect worldBounds;
     private Rect glBounds;
 
     private Matrix4 worldToGL;
