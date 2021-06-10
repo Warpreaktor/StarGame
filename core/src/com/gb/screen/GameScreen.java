@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gb.Music.Soundtrack;
 import com.gb.base.BaseScreen;
+import com.gb.base.Sprite;
 import com.gb.math.Rect;
 import com.gb.math.Rnd;
 import com.gb.pool.BulletPool;
@@ -171,9 +172,18 @@ public class GameScreen extends BaseScreen {
         return false;
     }
 
+    public void collisions(){
+        for(Sprite obj : enemyShipPool.getActiveObjects()){
+            if (obj.isOutside(spaceShip)){
+                System.out.println("KA-BOOM!");
+            }
+        }
+    }
+
     @Override
     public void render(float delta) {
         update(delta);
+        collisions();
         freeAllDestroyed();
         draw();
     }

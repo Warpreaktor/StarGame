@@ -9,7 +9,7 @@ import com.gb.sprites.EnemyShip;
 
 public class EnemyEmitter {
 
-    private static final float GENERATE_INTERVAL = 4f;
+    private static final float GENERATE_INTERVAL = 3f;
 
     private static final float ENEMY_SMALL_HEIGHT = 0.1f;
     private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.01f;
@@ -29,7 +29,7 @@ public class EnemyEmitter {
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
     private static final float ENEMY_BIG_BULLET_VY = -0.3f;
     private static final int ENEMY_BIG_DAMAGE = 10;
-    private static final float ENEMY_BIG_RELOAD_INTERVAL = 1f;
+    private static final float ENEMY_BIG_RELOAD_INTERVAL = 0.5f;
     private static final int ENEMY_BIG_HP = 10;
 
 
@@ -55,9 +55,9 @@ public class EnemyEmitter {
         enemySmallRegions = Regions.split(textureAtlas.findRegion("enemy0"), 1, 2, 2);
         enemyMediumRegions = Regions.split(textureAtlas.findRegion("enemy1"), 1, 2, 2);
         enemyBigRegions = Regions.split(textureAtlas.findRegion("enemy2"), 1, 2, 2);
-        enemySmallSpeed = new Vector2(0, -0.2f);
+        enemySmallSpeed = new Vector2(0, -0.02f);
         enemyMediumSpeed = new Vector2(0, -0.03f);
-        enemyBigSpeed = new Vector2(0, -0.005f);
+        enemyBigSpeed = new Vector2(0, -0.05f);
     }
 
     public void generate(float delta){

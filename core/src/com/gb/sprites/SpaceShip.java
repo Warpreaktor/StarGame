@@ -48,7 +48,6 @@ public class SpaceShip extends Ship {
 
         this.hp = 100;
 
-
     }
 
     @Override

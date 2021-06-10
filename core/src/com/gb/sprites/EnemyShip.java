@@ -58,18 +58,18 @@ public class EnemyShip extends Ship {
     public void update(float delta) {
         super.update(delta);
         bulletPos.set(pos.x, pos.y - getHalfHeight());
+
         if ( getTop() < worldBounds.getTop()){
             speed.set(speed0);
         } else{
             reloadTimer = reloadInterval * 0.8f;
         }
-
         if (worldBounds.isOutside(this)){
             destroy();
         }
 
         this.delta+=delta;
-        if (this.delta > 5f){
+        if (this.delta > 1.5f){
             shoot();
             this.delta = 0;
         }
@@ -77,11 +77,6 @@ public class EnemyShip extends Ship {
         pos.mulAdd(speed, delta);
         distance.set(target);
 
-        if (distance.sub(pos).len() <= DISTANCE_LEN){
-            pos.set(target);
-        }else{
-            pos.add(speed);
-        }
         if (getTop() >= worldBounds.getTop()){
             setTop(worldBounds.getTop());
         }
@@ -93,21 +88,16 @@ public class EnemyShip extends Ship {
         }
         //Изменить логику
         if (getTop() <= worldBounds.getBottom()){
-            randomAtack();
         }
     }
 
 
     /**
-     * В данном методе захардкодил числа. Но думаю, что он претерпет очень
-     *      большие изменения либо вообще будет удален так что не страшно.
+     * Метод выставляет рандомную точку по оси X для появления кораблей противника
      */
     public void randomAtack(){
         this.pos.x = Rnd.nextFloat(0, 1);
         this.pos.y = worldBounds.getTop();
-        this.target.set(Rnd.nextFloat(0 ,1), worldBounds.getBottom() - 0.6f);
-        distance.set(0, worldBounds.getBottom());
-        speed.set(target.cpy().sub(pos)).setLength(DISTANCE_LEN);
     }
 
 }
