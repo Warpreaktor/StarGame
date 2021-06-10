@@ -13,7 +13,6 @@ public class EnemyShipPool extends SpritePool<EnemyShip> {
 
     public EnemyShipPool(Rect worldBounds, BulletPool bulletPool, Sound bulletSnd) {
         this.worldBounds = worldBounds;
-        System.out.println("EnemyShipPool = " + worldBounds.hashCode());
         this.bulletPool = bulletPool;
         this.bulletSnd = bulletSnd;
     }

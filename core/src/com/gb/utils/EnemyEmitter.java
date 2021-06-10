@@ -49,15 +49,14 @@ public class EnemyEmitter {
 
     public EnemyEmitter(Rect worldBounds, EnemyShipPool enemyShipPool, TextureAtlas textureAtlas) {
         this.worldBounds = worldBounds;
-        System.out.println("EnemyEmitter = " + this.worldBounds.hashCode());
         this.enemyShipPool = enemyShipPool;
         this.bulletRegion = textureAtlas.findRegion("bulletEnemy");
         enemySmallRegions = Regions.split(textureAtlas.findRegion("enemy0"), 1, 2, 2);
         enemyMediumRegions = Regions.split(textureAtlas.findRegion("enemy1"), 1, 2, 2);
         enemyBigRegions = Regions.split(textureAtlas.findRegion("enemy2"), 1, 2, 2);
-        enemySmallSpeed = new Vector2(0, -0.02f);
-        enemyMediumSpeed = new Vector2(0, -0.03f);
-        enemyBigSpeed = new Vector2(0, -0.05f);
+        enemySmallSpeed = new Vector2(0, -0.2f);
+        enemyMediumSpeed = new Vector2(0, -0.3f);
+        enemyBigSpeed = new Vector2(0, -0.5f);
     }
 
     public void generate(float delta){

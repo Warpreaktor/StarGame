@@ -13,9 +13,6 @@ public class Bullet extends Sprite {
     private int damage;
     private Sprite owner;
 
-    private Sound shoot;
-    private float volume = 0.5f;
-
     public Bullet(){
         animation = new TextureRegion[1];
         speed = new Vector2();
