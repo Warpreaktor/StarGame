@@ -215,15 +215,22 @@ public class GameScreen extends BaseScreen {
             }
         }
         for (Bullet bullet : bulletPool.getActiveObjects()) {
-            if (bullet.isDestroyed() || bullet.getOwner() != spaceShip) {
+            if (bullet.isDestroyed()) {
                 continue;
             }
-            for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
-                if (enemyShip.isDestroyed()) {
-                    continue;
+            if (bullet.getOwner() == spaceShip) {
+                for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
+                    if (enemyShip.isDestroyed()) {
+                        continue;
+                    }
+                    if (enemyShip.isBulletCollision(bullet)) {
+                        enemyShip.damage(bullet.getDamage());
+                        bullet.destroy();
+                    }
                 }
-                if (enemyShip.isBulletCollision(bullet)) {
-                    enemyShip.damage(bullet.getDamage());
+            }else{
+                if (spaceShip.isOutside(bullet)){
+                    spaceShip.damage(bullet.getDamage());
                     bullet.destroy();
                 }
             }
