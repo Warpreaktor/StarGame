@@ -1,5 +1,6 @@
 package com.gb.sprites;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.gb.base.Sprite;
 import com.gb.math.Rect;
@@ -14,6 +15,7 @@ public class GameOver extends Sprite {
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(HEIGHT);
-        this.pos.set(worldBounds.pos);
+        setTop(worldBounds.pos.y + 0.2f);
     }
+
 }

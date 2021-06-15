@@ -12,7 +12,7 @@ import com.gb.sprites.EnemyShip;
 import com.gb.sprites.Explosion;
 
 public class Ship extends Sprite{
-    private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
+    private static final float DAMAGE_ANIMATE_INTERVAL = 0.01f;
     private float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
 
     protected Rect worldBounds;
