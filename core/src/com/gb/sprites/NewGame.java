@@ -1,6 +1,5 @@
 package com.gb.sprites;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.gb.base.ScaleButton;
 import com.gb.math.Rect;
@@ -12,8 +11,13 @@ public class NewGame extends ScaleButton {
     private float timer = 0f;
     private static float height = 0.03f;
 
-    public NewGame(TextureAtlas atlas) {
+    private GameScreen screen;
+    private SpaceShip ship;
+
+    public NewGame(TextureAtlas atlas, GameScreen screen, SpaceShip ship) {
         super(atlas.findRegion("button_new_game"));
+        this.screen = screen;
+        this.ship = ship;
     }
 
     @Override
@@ -40,7 +44,9 @@ public class NewGame extends ScaleButton {
 
     @Override
     protected void action() {
-        new GameScreen();
+        ship.ressurection();
+        screen.switchState();
+        System.out.println("action");
     }
 
     @Override

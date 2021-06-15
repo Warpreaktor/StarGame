@@ -25,6 +25,7 @@ public class SpaceShip extends Ship {
     private final Vector2 speed0 = new Vector2(0.005f, 0); //Начальная скорость и направление движения корабля
     private Vector2 speed = new Vector2();    //скорость и направление движения корабля
 
+    private int hitpoint = 100;
 
 
     public SpaceShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSnd){
@@ -41,7 +42,7 @@ public class SpaceShip extends Ship {
         touch = new Vector2();
         distance = new Vector2();
 
-        this.hp = 1;
+        this.hp = hitpoint;
 
     }
 
@@ -198,5 +199,10 @@ public class SpaceShip extends Ship {
                 break;
         }
         return false;
+    }
+    public void ressurection(){
+        flushDestroy();
+        setBottom(worldBounds.getBottom() + 0.05f);
+        hp = hitpoint;
     }
 }

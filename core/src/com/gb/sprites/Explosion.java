@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.gb.base.Sprite;
 
 public class Explosion extends Sprite {
-    private static final float ANIMATE_INTERVAL = 0.1f;
+    private static final float ANIMATE_INTERVAL = 0.01f;
     private float delta;
 
     private Sound explSnd;

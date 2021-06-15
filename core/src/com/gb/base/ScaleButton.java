@@ -15,7 +15,6 @@ public abstract class ScaleButton extends Sprite{
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        System.out.println("scale");
         //Проверяем. Не нажата ли уже кнопка и попал ли щелчок мышью по кнопке метод isMe().
         if (pressed || !isMe(touch) ){
             return false;

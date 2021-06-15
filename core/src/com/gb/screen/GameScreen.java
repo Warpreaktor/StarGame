@@ -79,11 +79,11 @@ public class GameScreen extends BaseScreen {
         backgroundTexture = new Texture("cosmos.png");
         background = new Background(backgroundTexture);
         gameOver = new GameOver(mainAtlas);
-        newGame = new NewGame(mainAtlas);
 
         this.bulletSnd1 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound1.mp3"));
         bulletPool = new BulletPool();
         spaceShip = new SpaceShip(shipsAtlas, bulletPool, bulletSnd1);
+        newGame = new NewGame(mainAtlas, this, spaceShip);
         this.bulletSnd2 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound2.mp3"));
         this.explosionSnd1 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound2.mp3"));
         explosionsPool = new ExplosionsPool(mainAtlas, explosionSnd1);
@@ -140,6 +140,7 @@ public class GameScreen extends BaseScreen {
     }
 
     public void update(float delta) {
+        System.out.println(state);
         for (Star star : stars) {
             star.update(delta);
         }
@@ -280,5 +281,13 @@ public class GameScreen extends BaseScreen {
         collisions();
         freeAllDestroyed();
         draw();
+    }
+
+    public void switchState() {
+        if (state == State.GAME_OVER){
+            state = State.PLAYING;
+        }else{
+            state = State.GAME_OVER;
+        }
     }
 }
