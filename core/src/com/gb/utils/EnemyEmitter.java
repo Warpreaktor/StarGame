@@ -9,7 +9,7 @@ import com.gb.sprites.EnemyShip;
 
 public class EnemyEmitter {
 
-    private static final float GENERATE_INTERVAL = 3f;
+    private static final float GENERATE_INTERVAL = 2f;
 
     private static final float ENEMY_SMALL_HEIGHT = 0.1f;
     private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.01f;

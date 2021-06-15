@@ -19,17 +19,20 @@ import com.gb.sprites.Background;
 import com.gb.sprites.Bullet;
 import com.gb.sprites.EnemyShip;
 import com.gb.sprites.Explosion;
+import com.gb.sprites.GameOver;
 import com.gb.sprites.SpaceShip;
 import com.gb.sprites.Star;
 import com.gb.utils.EnemyEmitter;
 
 public class GameScreen extends BaseScreen {
-
+    private enum State {PLAYING, GAME_OVER}
     protected Vector2 speed0; //Начальная скорость и направление движения корабля
     protected Vector2 speed;    //скорость и направление движения корабля
 
+    //Экранные картинки
     private Texture backgroundTexture;
     private Background background;
+    private GameOver gameOver;
 
     private SpaceShip spaceShip;
     private EnemyShip enemyShip;
@@ -60,26 +63,29 @@ public class GameScreen extends BaseScreen {
 
     private Explosion explosion;
 
+    private State state;
+
     @Override
     public void show() {
         super.show();
-
-        backgroundTexture = new Texture("cosmos.png");
-        background = new Background(backgroundTexture);
-
-
         //Сейчас тут дублируются атласы, поотому что я хотел бы его заменить на свой, но пока с этим
         // проблема. В будущем обязательно поменяю.
         shipsAtlas = new TextureAtlas("textures/mainAtlas.tpack");
         mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
         menuAtlas = new TextureAtlas("textures/menuAtlas.tpack");
 
+        backgroundTexture = new Texture("cosmos.png");
+        background = new Background(backgroundTexture);
+        gameOver = new GameOver(mainAtlas);
+
+
+
         this.bulletSnd1 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound1.mp3"));
         bulletPool = new BulletPool();
         spaceShip = new SpaceShip(shipsAtlas, bulletPool, bulletSnd1);
         this.bulletSnd2 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound2.mp3"));
-        //        this.explosionSnd1 = new Gdx.audio.newSound(Gdx.files.internal("путь к звуку со взрывом"));
-        explosionsPool = new ExplosionsPool(mainAtlas);
+        this.explosionSnd1 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound2.mp3"));
+        explosionsPool = new ExplosionsPool(mainAtlas, explosionSnd1);
         enemyShipPool = new EnemyShipPool(worldBounds, bulletPool, bulletSnd2);
 
         touch = new Vector2();
@@ -100,6 +106,7 @@ public class GameScreen extends BaseScreen {
         soundtrack.play();
         soundtrack.setVolume(musicVolume);
         soundtrack.setLooping(true);
+        state = State.PLAYING;
     }
 
     @Override
@@ -111,6 +118,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.resize(worldBounds);
         }
+        gameOver.resize(worldBounds);
     }
 
     @Override
@@ -133,12 +141,15 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.update(delta);
         }
-        spaceShip.update(0.15f);
-        bulletPool.updateActiveSprites(delta);
-        enemyShipPool.updateActiveSprites(delta);
-        explosionsPool.updateActiveSprites(delta);
-        enemyEmitter.generate(delta);
 
+        explosionsPool.updateActiveSprites(delta);
+
+        if (state == State.PLAYING) {
+            enemyEmitter.generate(delta);
+            spaceShip.update(0.15f);
+            bulletPool.updateActiveSprites(delta);
+            enemyShipPool.updateActiveSprites(delta);
+        }
     }
 
     public void freeAllDestroyed() {
@@ -160,9 +171,13 @@ public class GameScreen extends BaseScreen {
         }
 
         //Третий слой
-        spaceShip.draw(batch);
-        enemyShipPool.drawActiveSprite(batch);
-        bulletPool.drawActiveSprite(batch);
+        if (state == State.PLAYING) {
+            spaceShip.draw(batch);
+            enemyShipPool.drawActiveSprite(batch);
+            bulletPool.drawActiveSprite(batch);
+        }else{
+            gameOver.draw(batch);
+        }
         explosionsPool.drawActiveSprite(batch);
 
         batch.end();
@@ -170,31 +185,41 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        spaceShip.touchDown(touch, pointer, button);
+        if (state == State.PLAYING) {
+            spaceShip.touchDown(touch, pointer, button);
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        spaceShip.touchUp(touch, pointer, button);
+        if (state == State.PLAYING) {
+            spaceShip.touchUp(touch, pointer, button);
+        }
         return false;
     }
 
     @Override
     public boolean touchDragged(Vector2 touch, int pointer) {
-        spaceShip.touchDragged(touch, pointer);
+        if (state == State.PLAYING) {
+            spaceShip.touchDragged(touch, pointer);
+        }
         return false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        spaceShip.keyDown(keycode);
+        if (state == State.PLAYING) {
+            spaceShip.keyDown(keycode);
+        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        spaceShip.keyUp(keycode);
+        if (state == State.PLAYING) {
+            spaceShip.keyUp(keycode);
+        }
         return false;
     }
 
@@ -209,9 +234,8 @@ public class GameScreen extends BaseScreen {
             float minDist = enemyShip.getHalfWidth() + spaceShip.getHalfWidth();
             if (enemyShip.pos.dst(spaceShip.pos) < minDist) {
                 enemyShip.destroy();
-                spaceShip.damage(enemyShip.getHp());
-                Explosion expl = explosionsPool.obtain();
-                expl.set(enemyShip.pos, 0.5f, mainAtlas);
+                spaceShip.damage(enemyShip.getHp(), explosionsPool, mainAtlas);
+                enemyShip.explose(explosionsPool, mainAtlas);
             }
         }
         for (Bullet bullet : bulletPool.getActiveObjects()) {
@@ -224,16 +248,19 @@ public class GameScreen extends BaseScreen {
                         continue;
                     }
                     if (enemyShip.isBulletCollision(bullet)) {
-                        enemyShip.damage(bullet.getDamage());
+                        enemyShip.damage(bullet.getDamage(), explosionsPool, mainAtlas);
                         bullet.destroy();
                     }
                 }
             }else{
                 if (spaceShip.isOutside(bullet)){
-                    spaceShip.damage(bullet.getDamage());
+                    spaceShip.damage(bullet.getDamage(), explosionsPool, mainAtlas);
                     bullet.destroy();
                 }
             }
+        }
+        if (spaceShip.isDestroyed()){
+            state = State.GAME_OVER;
         }
     }
 

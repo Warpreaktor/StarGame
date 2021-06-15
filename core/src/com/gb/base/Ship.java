@@ -1,11 +1,15 @@
 package com.gb.base;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.gb.math.Rect;
 import com.gb.pool.BulletPool;
+import com.gb.pool.ExplosionsPool;
 import com.gb.sprites.Bullet;
+import com.gb.sprites.EnemyShip;
+import com.gb.sprites.Explosion;
 
 public class Ship extends Sprite{
     private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
@@ -31,7 +35,6 @@ public class Ship extends Sprite{
     }
 
 
-
     public Ship(TextureRegion region, int rows, int cols, int frames) {
         super(region, rows, cols, frames);
     }
@@ -50,14 +53,26 @@ public class Ship extends Sprite{
         }
     }
 
-    public void damage(int damage){
+    public void damage(int damage, ExplosionsPool explosionsPool, TextureAtlas atlas){
         hp -= damage;
         if (hp <= 0){
             hp = 0;
             destroy();
+            this.explose(explosionsPool, atlas);
         }
         frame = 1;
         damageAnimateTimer = 0f;
+
+    }
+
+    @Override
+    public void destroy(){
+        super.destroy();
+    }
+
+    public void explose(ExplosionsPool explosionsPool, TextureAtlas atlas){
+        Explosion expl = explosionsPool.obtain();
+        expl.set(this.pos, getHeight(), atlas);
     }
 
     public Rect getWorldBounds() {

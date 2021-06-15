@@ -41,7 +41,7 @@ public class SpaceShip extends Ship {
         touch = new Vector2();
         distance = new Vector2();
 
-        this.hp = 100;
+        this.hp = 1;
 
     }
 
