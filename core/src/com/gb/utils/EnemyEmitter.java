@@ -54,9 +54,9 @@ public class EnemyEmitter {
         enemySmallRegions = Regions.split(textureAtlas.findRegion("enemy0"), 1, 2, 2);
         enemyMediumRegions = Regions.split(textureAtlas.findRegion("enemy1"), 1, 2, 2);
         enemyBigRegions = Regions.split(textureAtlas.findRegion("enemy2"), 1, 2, 2);
-        enemySmallSpeed = new Vector2(0, -0.2f);
+        enemySmallSpeed = new Vector2(0, -0.5f);
         enemyMediumSpeed = new Vector2(0, -0.3f);
-        enemyBigSpeed = new Vector2(0, -0.5f);
+        enemyBigSpeed = new Vector2(0, -0.2f);
     }
 
     public void generate(float delta){

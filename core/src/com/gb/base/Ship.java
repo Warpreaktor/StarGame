@@ -8,6 +8,9 @@ import com.gb.pool.BulletPool;
 import com.gb.sprites.Bullet;
 
 public class Ship extends Sprite{
+    private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
+    private float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
+
     protected Rect worldBounds;
 
     protected float reloadInterval;
@@ -27,6 +30,8 @@ public class Ship extends Sprite{
         super();
     }
 
+
+
     public Ship(TextureRegion region, int rows, int cols, int frames) {
         super(region, rows, cols, frames);
     }
@@ -37,7 +42,29 @@ public class Ship extends Sprite{
         bullet.set(this, bulletRegion, this.bulletPos, bulletSpeed, worldBounds, bulletDamage, bulletHeight);
     }
 
+    @Override
+    public void update(float delta){
+        damageAnimateTimer += delta;
+        if(damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL){
+            frame = 0;
+        }
+    }
+
+    public void damage(int damage){
+        hp -= damage;
+        if (hp <= 0){
+            hp = 0;
+            destroy();
+        }
+        frame = 1;
+        damageAnimateTimer = 0f;
+    }
+
     public Rect getWorldBounds() {
         return worldBounds;
+    }
+
+    public int getHp() {
+        return hp;
     }
 }

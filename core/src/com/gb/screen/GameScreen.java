@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gb.Music.Soundtrack;
 import com.gb.base.BaseScreen;
+import com.gb.base.Ship;
 import com.gb.base.Sprite;
 import com.gb.math.Rect;
 import com.gb.math.Rnd;
@@ -15,6 +16,7 @@ import com.gb.pool.BulletPool;
 import com.gb.pool.EnemyShipPool;
 import com.gb.pool.ExplosionsPool;
 import com.gb.sprites.Background;
+import com.gb.sprites.Bullet;
 import com.gb.sprites.EnemyShip;
 import com.gb.sprites.Explosion;
 import com.gb.sprites.SpaceShip;
@@ -22,6 +24,7 @@ import com.gb.sprites.Star;
 import com.gb.utils.EnemyEmitter;
 
 public class GameScreen extends BaseScreen {
+
     protected Vector2 speed0; //Начальная скорость и направление движения корабля
     protected Vector2 speed;    //скорость и направление движения корабля
 
@@ -65,7 +68,6 @@ public class GameScreen extends BaseScreen {
         background = new Background(backgroundTexture);
 
 
-
         //Сейчас тут дублируются атласы, поотому что я хотел бы его заменить на свой, но пока с этим
         // проблема. В будущем обязательно поменяю.
         shipsAtlas = new TextureAtlas("textures/mainAtlas.tpack");
@@ -73,10 +75,10 @@ public class GameScreen extends BaseScreen {
         menuAtlas = new TextureAtlas("textures/menuAtlas.tpack");
 
         this.bulletSnd1 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound1.mp3"));
+        bulletPool = new BulletPool();
         spaceShip = new SpaceShip(shipsAtlas, bulletPool, bulletSnd1);
         this.bulletSnd2 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound2.mp3"));
         //        this.explosionSnd1 = new Gdx.audio.newSound(Gdx.files.internal("путь к звуку со взрывом"));
-        bulletPool = new BulletPool();
         explosionsPool = new ExplosionsPool(mainAtlas);
         enemyShipPool = new EnemyShipPool(worldBounds, bulletPool, bulletSnd2);
 
@@ -106,7 +108,7 @@ public class GameScreen extends BaseScreen {
         this.worldBounds = worldBounds;
         background.resize(worldBounds);
         spaceShip.resize(worldBounds);
-        for(Star star: stars){
+        for (Star star : stars) {
             star.resize(worldBounds);
         }
     }
@@ -127,8 +129,8 @@ public class GameScreen extends BaseScreen {
 
     }
 
-    public void update(float delta){
-        for(Star star: stars){
+    public void update(float delta) {
+        for (Star star : stars) {
             star.update(delta);
         }
         spaceShip.update(0.15f);
@@ -136,23 +138,24 @@ public class GameScreen extends BaseScreen {
         enemyShipPool.updateActiveSprites(delta);
         explosionsPool.updateActiveSprites(delta);
         enemyEmitter.generate(delta);
+
     }
 
-    public void freeAllDestroyed(){
+    public void freeAllDestroyed() {
         enemyShipPool.freeAllDestroyed();
         bulletPool.freeAllDestroyed();
         explosionsPool.freeAllDestroyed();
     }
 
-    public void draw(){
-        ScreenUtils.clear(0,0,0,1);
+    public void draw() {
+        ScreenUtils.clear(0, 0, 0, 1);
         batch.begin();
 
         //первый слой
         background.draw(batch);
 
         //второй слой
-        for(Star star: stars){
+        for (Star star : stars) {
             star.draw(batch);
         }
 
@@ -198,17 +201,31 @@ public class GameScreen extends BaseScreen {
     /**
      * Метод определяющий столкновения корабля игрока с кораблями противника и пулями.
      */
-    public void collisions(){
-        for(Sprite obj : enemyShipPool.getActiveObjects()){
-            if (!obj.isOutside(spaceShip)){
-                obj.destroy();
+    public void collisions() {
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
+            if (enemyShip.isDestroyed()) {
+                continue;
+            }
+            float minDist = enemyShip.getHalfWidth() + spaceShip.getHalfWidth();
+            if (enemyShip.pos.dst(spaceShip.pos) < minDist) {
+                enemyShip.destroy();
+                spaceShip.damage(enemyShip.getHp());
                 Explosion expl = explosionsPool.obtain();
-                expl.set(obj.pos, 0.5f, mainAtlas);
+                expl.set(enemyShip.pos, 0.5f, mainAtlas);
             }
         }
-        for(Sprite obj : bulletPool.getActiveObjects()){
-            if (!obj.isOutside(spaceShip)){
-                obj.destroy();
+        for (Bullet bullet : bulletPool.getActiveObjects()) {
+            if (bullet.isDestroyed() || bullet.getOwner() != spaceShip) {
+                continue;
+            }
+            for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
+                if (enemyShip.isDestroyed()) {
+                    continue;
+                }
+                if (enemyShip.isBulletCollision(bullet)) {
+                    enemyShip.damage(bullet.getDamage());
+                    bullet.destroy();
+                }
             }
         }
     }

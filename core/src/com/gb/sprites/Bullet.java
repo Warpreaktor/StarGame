@@ -54,4 +54,5 @@ public class Bullet extends Sprite {
     public Sprite getOwner() {
         return owner;
     }
+
 }
