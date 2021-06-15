@@ -1,13 +1,10 @@
 package com.gb.sprites;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.gb.base.Ship;
-import com.gb.base.Sprite;
 import com.gb.math.Rect;
 import com.gb.pool.BulletPool;
 
@@ -21,8 +18,6 @@ public class SpaceShip extends Ship {
     private static final int INVALID_POINTER = -1;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
-
-
 
     //Движение
     private Vector2 distance;   //дистанция до указателя
@@ -47,7 +42,6 @@ public class SpaceShip extends Ship {
         distance = new Vector2();
 
         this.hp = 100;
-
 
     }
 

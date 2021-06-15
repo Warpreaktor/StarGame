@@ -8,12 +8,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gb.Music.Soundtrack;
 import com.gb.base.BaseScreen;
+import com.gb.base.Sprite;
 import com.gb.math.Rect;
 import com.gb.math.Rnd;
 import com.gb.pool.BulletPool;
 import com.gb.pool.EnemyShipPool;
+import com.gb.pool.ExplosionsPool;
 import com.gb.sprites.Background;
 import com.gb.sprites.EnemyShip;
+import com.gb.sprites.Explosion;
 import com.gb.sprites.SpaceShip;
 import com.gb.sprites.Star;
 import com.gb.utils.EnemyEmitter;
@@ -39,11 +42,20 @@ public class GameScreen extends BaseScreen {
 
     private BulletPool bulletPool;
     private EnemyShipPool enemyShipPool;
+    private ExplosionsPool explosionsPool;
     private EnemyEmitter enemyEmitter;
 
+    //Звуки и музыка
     private Soundtrack soundtrack;
     private Sound bulletSnd1;
     private Sound bulletSnd2;
+    private Sound explosionSnd1;
+    private Sound explosionSnd2;
+
+    private float soundsVolume = 0.5f;
+    private float musicVolume = 0.3f;
+
+    private Explosion explosion;
 
     @Override
     public void show() {
@@ -52,19 +64,24 @@ public class GameScreen extends BaseScreen {
         backgroundTexture = new Texture("cosmos.png");
         background = new Background(backgroundTexture);
 
-        bulletPool = new BulletPool();
 
+
+        //Сейчас тут дублируются атласы, поотому что я хотел бы его заменить на свой, но пока с этим
+        // проблема. В будущем обязательно поменяю.
         shipsAtlas = new TextureAtlas("textures/mainAtlas.tpack");
+        mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
+        menuAtlas = new TextureAtlas("textures/menuAtlas.tpack");
+
         this.bulletSnd1 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound1.mp3"));
         spaceShip = new SpaceShip(shipsAtlas, bulletPool, bulletSnd1);
         this.bulletSnd2 = Gdx.audio.newSound(Gdx.files.internal("sounds/bulletSound2.mp3"));
-        System.out.println("GameScreen = " + worldBounds.hashCode());
+        //        this.explosionSnd1 = new Gdx.audio.newSound(Gdx.files.internal("путь к звуку со взрывом"));
+        bulletPool = new BulletPool();
+        explosionsPool = new ExplosionsPool(mainAtlas);
         enemyShipPool = new EnemyShipPool(worldBounds, bulletPool, bulletSnd2);
 
         touch = new Vector2();
 
-        mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
-        menuAtlas = new TextureAtlas("textures/menuAtlas.tpack");
         //Звезды
         stars = new Star[STARS_COUNT];
         for (int i = 0; i < stars.length; i++) {
@@ -75,10 +92,11 @@ public class GameScreen extends BaseScreen {
         }
 
         enemyEmitter = new EnemyEmitter(worldBounds, enemyShipPool, mainAtlas);
+
         //Инициализация фоновой музыки
         soundtrack = new Soundtrack();
         soundtrack.play();
-        soundtrack.setVolume(0.3f);
+        soundtrack.setVolume(musicVolume);
         soundtrack.setLooping(true);
     }
 
@@ -105,6 +123,8 @@ public class GameScreen extends BaseScreen {
         bulletSnd1.dispose();
         bulletSnd2.dispose();
         enemyShipPool.dispose();
+        explosionsPool.dispose();
+
     }
 
     public void update(float delta){
@@ -114,12 +134,14 @@ public class GameScreen extends BaseScreen {
         spaceShip.update(0.15f);
         bulletPool.updateActiveSprites(delta);
         enemyShipPool.updateActiveSprites(delta);
+        explosionsPool.updateActiveSprites(delta);
         enemyEmitter.generate(delta);
     }
 
     public void freeAllDestroyed(){
         enemyShipPool.freeAllDestroyed();
         bulletPool.freeAllDestroyed();
+        explosionsPool.freeAllDestroyed();
     }
 
     public void draw(){
@@ -138,6 +160,8 @@ public class GameScreen extends BaseScreen {
         spaceShip.draw(batch);
         enemyShipPool.drawActiveSprite(batch);
         bulletPool.drawActiveSprite(batch);
+        explosionsPool.drawActiveSprite(batch);
+
         batch.end();
     }
 
@@ -171,9 +195,28 @@ public class GameScreen extends BaseScreen {
         return false;
     }
 
+    /**
+     * Метод определяющий столкновения корабля игрока с кораблями противника и пулями.
+     */
+    public void collisions(){
+        for(Sprite obj : enemyShipPool.getActiveObjects()){
+            if (!obj.isOutside(spaceShip)){
+                obj.destroy();
+                Explosion expl = explosionsPool.obtain();
+                expl.set(obj.pos, 0.5f, mainAtlas);
+            }
+        }
+        for(Sprite obj : bulletPool.getActiveObjects()){
+            if (!obj.isOutside(spaceShip)){
+                obj.destroy();
+            }
+        }
+    }
+
     @Override
     public void render(float delta) {
         update(delta);
+        collisions();
         freeAllDestroyed();
         draw();
     }

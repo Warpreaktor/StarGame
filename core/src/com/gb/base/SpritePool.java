@@ -33,13 +33,6 @@ public abstract class SpritePool<T extends Sprite> {
             }
         }
     }
-    public void updateActiveSprites(SpriteBatch batch){
-        for(Sprite sprite: activeObjects){
-            if (!sprite.isDestroyed()){
-                sprite.draw(batch);
-            }
-        }
-    }
 
     public void drawActiveSprite(SpriteBatch batch){
         for(Sprite sprite: activeObjects){
