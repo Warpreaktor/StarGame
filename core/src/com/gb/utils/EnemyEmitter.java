@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.gb.base.Ship;
 import com.gb.math.Rect;
 import com.gb.pool.EnemyShipPool;
+import com.gb.sprites.EnemyShips.BigShip;
 import com.gb.sprites.EnemyShips.MediumShip;
 import com.gb.sprites.EnemyShips.SmallShip;
 
@@ -13,13 +14,6 @@ public class EnemyEmitter {
     private static final float GENERATE_INTERVAL = 1f; //Частота генерации врагов
 
     protected TextureAtlas atlas;
-
-    private static final float ENEMY_BIG_HEIGHT = 0.2f;
-    private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
-    private static final float ENEMY_BIG_BULLET_SPEED = -0.5f;
-    private static final int ENEMY_BIG_DAMAGE = 10;
-    private static final float ENEMY_BIG_RELOAD_INTERVAL = 0.5f;
-    private static final int ENEMY_BIG_HP = 10;
 
     private int level;
     private float generateTimer;
@@ -50,11 +44,10 @@ public class EnemyEmitter {
         level = 1;
     }
 
-    public void generate(Ship spaceShip, float delta, int frags){
+    public void generate(Ship spaceShip, float delta, int frags) {
         generateTimer += delta;
         if (generateTimer >= GENERATE_INTERVAL) {
             generateTimer = 0f;
-            //EnemyShip enemyShip = enemyShipPool.obtain();
             float type = (float) Math.random();
             if (type < 0.5f) {
                 SmallShip smallShip = enemyShipPool.newSmallShip(enemySmallRegions, bulletRegion);
@@ -63,23 +56,14 @@ public class EnemyEmitter {
             } else if (type < 0.8f) {
                 MediumShip mediumShip = enemyShipPool.newMediumShip(enemyMediumRegions, bulletRegion);
                 mediumShip.targetAtack(spaceShip);
+            } else {
+                BigShip bigShip = enemyShipPool.newBigShip(enemyMediumRegions, bulletRegion);
+                bigShip.atack();
             }
-//            else {
-//                enemyShip.set(
-//                        enemyBigRegions,
-//                        enemyBigSpeed,
-//                        bulletRegion,
-//                        ENEMY_BIG_BULLET_HEIGHT,
-//                        ENEMY_BIG_BULLET_SPEED,
-//                        ENEMY_BIG_DAMAGE,
-//                        ENEMY_BIG_RELOAD_INTERVAL,
-//                        ENEMY_BIG_HEIGHT,
-//                        ENEMY_BIG_HP
-//                );
-            }
-//            enemyShip.randomAtack();
+            BigShip bigShip = enemyShipPool.newBigShip(enemyMediumRegions, bulletRegion);
+            bigShip.atack();
         }
-
+    }
     public int getLevel() {
         return level;
     }

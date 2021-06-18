@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gb.base.Ship;
 import com.gb.base.SpritePool;
 import com.gb.math.Rect;
+import com.gb.sprites.EnemyShips.BigShip;
 import com.gb.sprites.EnemyShips.EnemyShip;
 import com.gb.sprites.EnemyShips.MediumShip;
 import com.gb.sprites.EnemyShips.SmallShip;
@@ -44,6 +45,10 @@ public class EnemyShipPool extends SpritePool<EnemyShip> {
         MediumShip mediumShip = new MediumShip(animation, bulletRegion, worldBounds, bulletPool, bulletSnd);
         activeObjects.add(mediumShip);
         return mediumShip;
-
+    }
+    public BigShip newBigShip(TextureRegion[] animation, TextureRegion bulletRegion){
+        BigShip bigShip = new BigShip(animation, bulletRegion, worldBounds, bulletPool, bulletSnd);
+        activeObjects.add(bigShip);
+        return bigShip;
     }
 }

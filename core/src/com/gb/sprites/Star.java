@@ -19,7 +19,7 @@ public class Star extends Sprite {
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        float starSize = Rnd.nextFloat(0.003f, 0.006f);
+        float starSize = Rnd.nextFloat(0.001f, 0.002f);
         setHeightProportion(starSize);
         this.worldBounds = worldBounds;
         //Генерируем случайную позицию появления объекта звезды
