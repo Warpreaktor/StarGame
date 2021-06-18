@@ -18,14 +18,6 @@ public class Bullet extends Sprite {
         speed = new Vector2();
     }
 
-    @Override
-    public void update(float delta) {
-        pos.mulAdd(speed, delta);
-        if (isOutside(worldbounds)){
-            destroy();
-        }
-    }
-
     public void set(Sprite owner,
                     TextureRegion textureRegion,
                     Vector2 pos0,
@@ -43,10 +35,13 @@ public class Bullet extends Sprite {
 
     }
 
-    public Vector2 getSpeed() {
-        return speed;
+    @Override
+    public void update(float delta) {
+        pos.mulAdd(speed, delta);
+        if (isOutside(worldbounds)){
+            destroy();
+        }
     }
-
     public int getDamage() {
         return damage;
     }

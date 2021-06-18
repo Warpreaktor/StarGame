@@ -39,6 +39,10 @@ public class Sprite extends Rect {
 
     }
 
+    public void setAnimation(TextureRegion[] animation) {
+        this.animation = animation;
+    }
+
     /**
      * Логика работы спрайта.
      * @param delta - отрезок времени.

@@ -10,8 +10,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.gb.Music.Soundtrack;
 import com.gb.base.BaseScreen;
 import com.gb.base.Font;
-import com.gb.base.Ship;
-import com.gb.base.Sprite;
 import com.gb.math.Rect;
 import com.gb.math.Rnd;
 import com.gb.pool.BulletPool;
@@ -19,7 +17,7 @@ import com.gb.pool.EnemyShipPool;
 import com.gb.pool.ExplosionsPool;
 import com.gb.sprites.Background;
 import com.gb.sprites.Bullet;
-import com.gb.sprites.EnemyShip;
+import com.gb.sprites.EnemyShips.EnemyShip;
 import com.gb.sprites.Explosion;
 import com.gb.sprites.GameOver;
 import com.gb.sprites.NewGame;
@@ -295,7 +293,7 @@ public class GameScreen extends BaseScreen {
                     }
                 }
             }else{
-                if (spaceShip.isOutside(bullet)){
+                if (spaceShip.isBulletCollision(bullet)){
                     spaceShip.damage(bullet.getDamage(), explosionsPool, mainAtlas);
                     bullet.destroy();
                 }

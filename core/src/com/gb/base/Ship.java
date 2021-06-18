@@ -8,7 +8,6 @@ import com.gb.math.Rect;
 import com.gb.pool.BulletPool;
 import com.gb.pool.ExplosionsPool;
 import com.gb.sprites.Bullet;
-import com.gb.sprites.EnemyShip;
 import com.gb.sprites.Explosion;
 
 public class Ship extends Sprite{
