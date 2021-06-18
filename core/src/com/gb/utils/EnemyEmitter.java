@@ -13,26 +13,26 @@ public class EnemyEmitter {
 
     private static final float ENEMY_SMALL_HEIGHT = 0.1f;
     private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.01f;
-    private static final float ENEMY_SMALL_BULLET_SPEED = -0.3f;
+    private static final float ENEMY_SMALL_BULLET_SPEED = -0.6f;
     private static final int ENEMY_SMALL_DAMAGE = 1;
     private static final float ENEMY_SMALL_RELOAD_INTERVAL = 3.0f;
     private static final int ENEMY_SMALL_HP = 1;
 
     private static final float ENEMY_MEDIUM_HEIGHT = 0.15f;
     private static final float ENEMY_MEDIUM_BULLET_HEIGHT = 0.02f;
-    private static final float ENEMY_MEDIUM_BULLET_VY = -0.25f;
+    private static final float ENEMY_MEDIUM_BULLET_SPEED = -0.5f;
     private static final int ENEMY_MEDIUM_DAMAGE = 5;
     private static final float ENEMY_MEDIUM_RELOAD_INTERVAL = 4f;
     private static final int ENEMY_MEDIUM_HP = 5;
 
     private static final float ENEMY_BIG_HEIGHT = 0.2f;
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
-    private static final float ENEMY_BIG_BULLET_VY = -0.3f;
+    private static final float ENEMY_BIG_BULLET_SPEED = -0.4f;
     private static final int ENEMY_BIG_DAMAGE = 10;
     private static final float ENEMY_BIG_RELOAD_INTERVAL = 0.5f;
     private static final int ENEMY_BIG_HP = 10;
 
-
+    private int level;
     private float generateTimer;
 
     private final TextureRegion[] enemySmallRegions;
@@ -57,9 +57,10 @@ public class EnemyEmitter {
         enemySmallSpeed = new Vector2(0, -0.5f);
         enemyMediumSpeed = new Vector2(0, -0.3f);
         enemyBigSpeed = new Vector2(0, -0.2f);
+        level = 1;
     }
 
-    public void generate(float delta){
+    public void generate(float delta, int frags){
         generateTimer += delta;
         if (generateTimer >= GENERATE_INTERVAL) {
             generateTimer = 0f;
@@ -83,7 +84,7 @@ public class EnemyEmitter {
                         enemyMediumSpeed,
                         bulletRegion,
                         ENEMY_MEDIUM_BULLET_HEIGHT,
-                        ENEMY_MEDIUM_BULLET_VY,
+                        ENEMY_MEDIUM_BULLET_SPEED,
                         ENEMY_MEDIUM_DAMAGE,
                         ENEMY_MEDIUM_RELOAD_INTERVAL,
                         ENEMY_MEDIUM_HEIGHT,
@@ -95,7 +96,7 @@ public class EnemyEmitter {
                         enemyBigSpeed,
                         bulletRegion,
                         ENEMY_BIG_BULLET_HEIGHT,
-                        ENEMY_BIG_BULLET_VY,
+                        ENEMY_BIG_BULLET_SPEED,
                         ENEMY_BIG_DAMAGE,
                         ENEMY_BIG_RELOAD_INTERVAL,
                         ENEMY_BIG_HEIGHT,
@@ -104,5 +105,9 @@ public class EnemyEmitter {
             }
             enemyShip.randomAtack();
         }
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

@@ -82,4 +82,6 @@ public class Ship extends Sprite{
     public int getHp() {
         return hp;
     }
+
+
 }

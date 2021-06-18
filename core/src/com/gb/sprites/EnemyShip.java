@@ -43,6 +43,7 @@ public class EnemyShip extends Ship {
             int hp
     ){
         this.animation = animation;
+       this.bulletPos.set(getHalfWidth(), getBottom());
         this.speed0 = speed0;
         this.bulletRegion = bulletRegion;
         this.bulletHeight = bulletHeight;
