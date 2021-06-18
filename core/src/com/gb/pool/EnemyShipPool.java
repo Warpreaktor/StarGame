@@ -7,6 +7,7 @@ import com.gb.base.Ship;
 import com.gb.base.SpritePool;
 import com.gb.math.Rect;
 import com.gb.sprites.EnemyShips.EnemyShip;
+import com.gb.sprites.EnemyShips.MediumShip;
 import com.gb.sprites.EnemyShips.SmallShip;
 
 public class EnemyShipPool extends SpritePool<EnemyShip> {
@@ -27,14 +28,22 @@ public class EnemyShipPool extends SpritePool<EnemyShip> {
     }
 
     public SmallShip newSmallShip(TextureRegion[] animation, TextureRegion bulletRegion){
-        SmallShip smallShip;
-        if (freeObjects.isEmpty()){
-            smallShip = new SmallShip(animation, bulletRegion, worldBounds, bulletPool, bulletSnd);
-        } else{
-            smallShip = (SmallShip) freeObjects.remove(freeObjects.size() - 1);
-        }
+        SmallShip smallShip = new SmallShip(animation, bulletRegion, worldBounds, bulletPool, bulletSnd);
+        //Нужно для того чтобы добавить объект в пул
+//        if (freeObjects.isEmpty()){
+//            smallShip = new SmallShip(animation, bulletRegion, worldBounds, bulletPool, bulletSnd);
+//        }
+//        else{
+//            smallShip = (SmallShip) freeObjects.remove(freeObjects.size() - 1);
+//        }
         activeObjects.add(smallShip);
         return smallShip;
+
+    }
+    public MediumShip newMediumShip(TextureRegion[] animation, TextureRegion bulletRegion){
+        MediumShip mediumShip = new MediumShip(animation, bulletRegion, worldBounds, bulletPool, bulletSnd);
+        activeObjects.add(mediumShip);
+        return mediumShip;
 
     }
 }

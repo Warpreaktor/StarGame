@@ -165,7 +165,7 @@ public class GameScreen extends BaseScreen {
         explosionsPool.updateActiveSprites(delta);
 
         if (state == State.PLAYING) {
-            enemyEmitter.generate(delta, frags);
+            enemyEmitter.generate(spaceShip, delta, frags);
             spaceShip.update(0.15f);
             bulletPool.updateActiveSprites(delta);
             enemyShipPool.updateActiveSprites(delta);

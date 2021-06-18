@@ -2,23 +2,25 @@ package com.gb.sprites.EnemyShips;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.gb.base.Ship;
 import com.gb.math.Rect;
 import com.gb.math.Rnd;
 import com.gb.pool.BulletPool;
 
-public class SmallShip extends EnemyShip{
-
-    private final float HEIGHT = 0.1f;
-    private final float BULLET_HEIGHT = 0.01f;
-    private final float BULLET_SPEED_Y = -0.9f;
-    private final int DAMAGE = 1;
-    private final float RELOAD_INTERVAL = 3.0f;
-    private final int HP = 2;
+public class MediumShip extends EnemyShip{
+    //Настройки корабля
+    private static final float HEIGHT = 0.15f;
+    private static final float BULLET_HEIGHT = 0.02f;
+    private static final float BULLET_SPEED_Y = -1f; //-1 = Скорость корабля.
+    private static final int DAMAGE = 5;
+    private static final float RELOAD_INTERVAL = 4f;
+    private static final int HP = 5;
     private final float RELOAD_WEAPON = 0.3f; //Чем меньше тем быстрее перезарядка и стрельба.
 
-    private boolean atackMode = true; //true = нападаем, false = отступаем.
+    //Ведение боя
+    private boolean atackMode; //true = нападаем, false = отступаем.
 
-    public SmallShip(TextureRegion[] animation, TextureRegion bulletRegion, Rect worldBounds, BulletPool bulletPool, Sound bulletSnd) {
+    public MediumShip(TextureRegion[] animation, TextureRegion bulletRegion, Rect worldBounds, BulletPool bulletPool, Sound bulletSnd) {
         super(worldBounds, bulletPool, bulletSnd);
         this.animation = animation;
         this.bulletRegion = bulletRegion;
@@ -29,11 +31,11 @@ public class SmallShip extends EnemyShip{
         this.reloadInterval = RELOAD_INTERVAL;
         this.hp = HP;
         this.shootSpd = RELOAD_WEAPON;
+
         //Стартовая позиция
         resetPosition();
 
         atackMode = true;
-
     }
 
     @Override
@@ -72,17 +74,8 @@ public class SmallShip extends EnemyShip{
         }
         if (getTop() <= worldBounds.getBottom()) {
         }
-        if (getBottom() <= worldBounds.getBottom() && atackMode == true) {
-            fintAtack();
-        }
-        if (getBottom() > 0 && atackMode == false){
-            withdraw();
-        }
+
     }
-    /**
-     * Метод выставляет рандомную точку по оси X для появления кораблей противника и задаёт
-     * координату для нападения
-     */
     public void atack() {
         this.speed0.set(Rnd.nextFloat(-0.5f, 0.5f), worldBounds.getBottom());
         this.speed.set(Rnd.nextFloat(-0.5f, 0.5f), worldBounds.getBottom());
@@ -95,6 +88,11 @@ public class SmallShip extends EnemyShip{
     public void withdraw(){
         this.speed0.set(Rnd.nextFloat(-0.5f, 0.5f), worldBounds.getBottom());
         this.speed.set(Rnd.nextFloat(-0.5f, 0.5f), worldBounds.getBottom());
+        atackMode = false;
+    }
+    public void targetAtack(Ship spaceShip){
+        this.speed0.set(spaceShip.pos.x, spaceShip.pos.y);
+        this.speed.set(spaceShip.pos.x, spaceShip.pos.y);
         atackMode = false;
     }
     public void resetPosition(){

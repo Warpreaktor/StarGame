@@ -58,9 +58,6 @@ public class EnemyShip extends Ship {
         this.bulletPos.set(getHalfWidth(), getBottom());
     }
 
-
-
-
     public boolean isBulletCollision(Rect bullet) {
         return !(
                         bullet.getRight() < getLeft()

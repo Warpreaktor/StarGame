@@ -3,22 +3,16 @@ package com.gb.utils;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.gb.base.Ship;
 import com.gb.math.Rect;
 import com.gb.pool.EnemyShipPool;
+import com.gb.sprites.EnemyShips.MediumShip;
 import com.gb.sprites.EnemyShips.SmallShip;
 
 public class EnemyEmitter {
     private static final float GENERATE_INTERVAL = 1f; //Частота генерации врагов
 
     protected TextureAtlas atlas;
-
-
-    private static final float ENEMY_MEDIUM_HEIGHT = 0.15f;
-    private static final float ENEMY_MEDIUM_BULLET_HEIGHT = 0.02f;
-    private static final float ENEMY_MEDIUM_BULLET_SPEED = -0.7f;
-    private static final int ENEMY_MEDIUM_DAMAGE = 5;
-    private static final float ENEMY_MEDIUM_RELOAD_INTERVAL = 4f;
-    private static final int ENEMY_MEDIUM_HP = 5;
 
     private static final float ENEMY_BIG_HEIGHT = 0.2f;
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
@@ -56,7 +50,7 @@ public class EnemyEmitter {
         level = 1;
     }
 
-    public void generate(float delta, int frags){
+    public void generate(Ship spaceShip, float delta, int frags){
         generateTimer += delta;
         if (generateTimer >= GENERATE_INTERVAL) {
             generateTimer = 0f;
@@ -65,31 +59,12 @@ public class EnemyEmitter {
             if (type < 0.5f) {
                 SmallShip smallShip = enemyShipPool.newSmallShip(enemySmallRegions, bulletRegion);
                 smallShip.atack();
-//                smallShip.setAnimation(enemySmallRegions);
-//                enemyShip.set(
-//                          enemySmallRegions
-//                        enemySmallSpeed,
-//                        bulletRegion
-////                        ENEMY_SMALL_BULLET_HEIGHT,
-////                        ENEMY_SMALL_BULLET_SPEED,
-////                        ENEMY_SMALL_DAMAGE,
-////                        ENEMY_SMALL_RELOAD_INTERVAL,
-////                        ENEMY_SMALL_HEIGHT,
-////                        ENEMY_SMALL_HP
-//                );
-//            } else if (type < 0.8f) {
-//                enemyShip.set(
-//                        enemyMediumRegions,
-//                        enemyMediumSpeed,
-//                        bulletRegion,
-//                        ENEMY_MEDIUM_BULLET_HEIGHT,
-//                        ENEMY_MEDIUM_BULLET_SPEED,
-//                        ENEMY_MEDIUM_DAMAGE,
-//                        ENEMY_MEDIUM_RELOAD_INTERVAL,
-//                        ENEMY_MEDIUM_HEIGHT,
-//                        ENEMY_MEDIUM_HP
-//                );
-//            } else {
+
+            } else if (type < 0.8f) {
+                MediumShip mediumShip = enemyShipPool.newMediumShip(enemyMediumRegions, bulletRegion);
+                mediumShip.targetAtack(spaceShip);
+            }
+//            else {
 //                enemyShip.set(
 //                        enemyBigRegions,
 //                        enemyBigSpeed,
@@ -104,7 +79,6 @@ public class EnemyEmitter {
             }
 //            enemyShip.randomAtack();
         }
-    }
 
     public int getLevel() {
         return level;
