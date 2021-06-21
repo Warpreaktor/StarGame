@@ -11,7 +11,7 @@ import com.gb.sprites.EnemyShips.MediumShip;
 import com.gb.sprites.EnemyShips.SmallShip;
 
 public class EnemyEmitter {
-    private static final float GENERATE_INTERVAL = 1f; //Частота генерации врагов
+    private static final float GENERATE_INTERVAL = 1.5f; //Частота генерации врагов
 
     protected TextureAtlas atlas;
 
@@ -52,7 +52,6 @@ public class EnemyEmitter {
             if (type < 0.5f) {
                 SmallShip smallShip = enemyShipPool.newSmallShip(enemySmallRegions, bulletRegion);
                 smallShip.atack();
-
             } else if (type < 0.8f) {
                 MediumShip mediumShip = enemyShipPool.newMediumShip(enemyMediumRegions, bulletRegion);
                 mediumShip.targetAtack(spaceShip);
@@ -60,8 +59,6 @@ public class EnemyEmitter {
                 BigShip bigShip = enemyShipPool.newBigShip(enemyMediumRegions, bulletRegion);
                 bigShip.atack();
             }
-            BigShip bigShip = enemyShipPool.newBigShip(enemyMediumRegions, bulletRegion);
-            bigShip.atack();
         }
     }
     public int getLevel() {

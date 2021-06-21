@@ -13,13 +13,15 @@ public class Star extends Sprite {
     public Star(TextureAtlas atlas) {
         super(atlas.findRegion("star")); //Идем в атлас и ищем по имени нужную текстуру
         starSpeed = new Vector2();
-        setStarsMovement(0,0);
+        float vx = Rnd.nextFloat(-0.0005f, 0.0005f);
+        float vy = Rnd.nextFloat(-0.1f, -0.05f);
+        starSpeed.set(vx, vy);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        float starSize = Rnd.nextFloat(0.001f, 0.002f);
+        float starSize = Rnd.nextFloat(0.001f, 0.004f);
         setHeightProportion(starSize);
         this.worldBounds = worldBounds;
         //Генерируем случайную позицию появления объекта звезды
